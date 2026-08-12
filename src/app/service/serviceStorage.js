@@ -36,7 +36,9 @@ export const useStateWithSession = (initialValue, key, keyPrefix) => {
     const [data, setData] = useState(readDataOrUseInitialValue());
 
     // we use useEffect to update data into sessionStorage when data changes
-    useEffect(() => writeDataIntoSession(data), [data]);
+    useEffect(() => {
+        writeDataIntoSession(data);
+    }, [data]);
 
     return [
         data,

@@ -11,7 +11,9 @@ const GlobalState = props => {
 
     const [language, setLanguage] = useStateWithSession('it', 'language', SESSION_PREFIX);
 
-    useEffect(() => initLanguage(language), [language]);
+    useEffect(() => {
+        initLanguage(language);
+    }, [language]);
 
     return (
         <GlobalContext.Provider

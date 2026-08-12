@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import Router from './app/Router.jsx';
 
@@ -13,10 +13,8 @@ const App = () => (
 );
 
 export const renderApp = () => {
-    ReactDOM.render(
-        <App />,
-        document.getElementById('root')
-    );
+    const root = createRoot(document.getElementById('root'));
+    root.render(<App />);
 };
 
 initI18N().then(renderApp());

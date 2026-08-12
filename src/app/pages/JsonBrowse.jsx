@@ -36,9 +36,6 @@ const JsonBrowse = () => {
         browseError
     } = useContext(CurstomContext);
 
-    // const loadingBrowse = true;
-    console.log(loadingRelated);
-
     const [selectedIndex, setSelectedIndex] = useStateWithSession('', 'selectedIndex', 'CustomState');
 
     const selectChangeHandler = value => {
@@ -47,6 +44,7 @@ const JsonBrowse = () => {
     };
 
     const isLoadingRelated = (key, name) => loadingRelated && loadingRelated.params.key == key && loadingRelated.params.name == name;
+    const relatedKey = name => `${selectedIndex}_${name}`;
 
     return (
         <Template hiddenContextBar boxedCentered>
@@ -84,9 +82,8 @@ const JsonBrowse = () => {
                                         loading={isLoadingRelated(key, e.name)}
                                         onClickHandler={collapsed => !collapsed && loadRelated({ index: selectedIndex, params: { key, name: e.name } })}>
                                         {
-                                            related[`${key}_${e.name}`] && (!isLoadingRelated(key, e.name) && related[`${key}_${e.name}`] && Array.isArray(related[`${key}_${e.name}`])) && <div><ul>{
-                                                related[`${key}_${e.name}`].map((data, index) => {
-                                                    // console.log(data);
+                                            related[relatedKey(e.name)] && (!isLoadingRelated(key, e.name) && Array.isArray(related[relatedKey(e.name)])) && <div><ul>{
+                                                related[relatedKey(e.name)].map((data, index) => {
 
                                                     if (data.target) {
                                                         return (

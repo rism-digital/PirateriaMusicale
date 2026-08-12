@@ -467,22 +467,28 @@ img.loading {
 
         &:nth-of-type(1) {
             img {
-                max-width: 500px !important;
-                padding: 4em 0;
+                width: 250px !important;
+                max-width: 100% !important;
+                height: auto;
+                padding: 0;
             }
         }
 
         &:nth-of-type(3) {
             img {
-                max-width: 660px !important;
-                padding: 6em 0;
+                width: 300px !important;
+                max-width: 100% !important;
+                height: auto;
+                padding: 0;
             }
         }
 
         &:nth-of-type(2) {
             img {
-                max-width: 250px !important;
-                padding: 3em 0 6em;
+                width: 250px !important;
+                max-width: 100% !important;
+                height: auto;
+                padding: 0;
             }
         }
 

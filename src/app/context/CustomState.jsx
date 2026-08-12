@@ -5,8 +5,6 @@ import CurstomContext from './customContext';
 
 const SESSION_PREFIX = 'FlorianBassani-CustomState';
 
-import Json from '../model/Json';
-
 const CustomState = props => {
 
     const [browseResults, setBrowseResults] = useState([], 'browseResults', SESSION_PREFIX);
@@ -21,49 +19,51 @@ const CustomState = props => {
 
     const [browseError, setBrowseError] = useState(false);
 
-    const [related, setRelated] = useState([]);
+    const [related, setRelated] = useState({});
 
     const loadRelated = ({ index, params }) => {
-        if (!related[`${params.key}_${params.name}`]) {
+        const relatedKey = `${index}_${params.name}`;
+
+        if (!related[relatedKey]) {
             setLoadingRelated({ index, params });
-            setTimeout(() => {
-                Json.browse({ index, params }).then(r => {
-                    setRelated({ ...related, [`${params.key}_${params.name}`]: r });
-                    setLoadingRelated(false);
-                });
-            }, 500);
+            import('../model/staticBrowse').then(({ related: getRelated }) => {
+                setRelated(current => ({ ...current, [relatedKey]: getRelated(index, params.name) }));
+            }).catch(error => {
+                console.error('Unable to load the local browse index.', error);
+                setBrowseError(true);
+            }).finally(() => setLoadingRelated(false));
         }
     };
 
-    const performBrowse = (index) => {
+    const performBrowse = async index => {
         setLoadingBrowse(true);
         setBrowseError(false);
-        Json.browse({ index }).then(r => {
-            if (Array.isArray(r)) {
-                setBrowseResults(r);
-                setLoadingBrowse(false);
-            } else {
-                setBrowseResults([]);
-                setLoadingBrowse(false);
-                setBrowseError(true);
-            }
-        }).catch(() => {
+        try {
+            const { browse } = await import('../model/staticBrowse');
+            setBrowseResults(browse(index));
+        } catch (error) {
+            console.error('Unable to load the local browse index.', error);
             setBrowseResults([]);
-            setLoadingBrowse(false);
             setBrowseError(true);
-        });
+        } finally {
+            setLoadingBrowse(false);
+        }
     };
 
-    const performSearch = (key) => {
+    const performSearch = async key => {
         setLoadingSearch(true);
-        Json.search({ key }).then(r => {
-            setSearchResults(r);
+        try {
+            const { search } = await import('../model/staticSearch');
+            setSearchResults(search(key));
+        } catch (error) {
+            console.error('Unable to load the local search index.', error);
+            setSearchResults([]);
+        } finally {
             setLoadingSearch(false);
-        });
+        }
     };
 
     const resetSearch = (e) => {
-        console.log('resetSearch');
         e && e.preventDefault();
         setSearchResults([]);
         setSearchTerm('');

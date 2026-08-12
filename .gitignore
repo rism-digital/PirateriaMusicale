@@ -4,3 +4,4 @@
 /json-adapter/node_modules/
 gulp.config.js
 gulp.staging.config.js
+.idea

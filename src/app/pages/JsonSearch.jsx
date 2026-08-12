@@ -9,20 +9,24 @@ import CurstomContext from '../context/customContext';
 
 import Input from '../components/form/Input.jsx';
 import FlexWrapper from '../components/template/components/FlexWrapper.jsx';
-import ActionLink from '../components/template/components/ActionLink.jsx';
 import Loading from '../components/template/components/Loading.jsx';
 
 import { PrimaryButton, SecondaryButton } from '../components/template/components/Buttons.jsx';
 
 import { t } from '../i18n';
 
+const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const getHighlightedText = (text, highlight) => {
-    // console.log(text, highlight);
-    // Split on highlight term and include term into parts, ignore case
-    var specials = new RegExp('[.*+?|()\\[\\]{}\\\\]', 'g');
-    const parts = text.split(new RegExp(`(${highlight.replace(specials, '\\$&')})`, 'gi'));
+    const terms = [...new Set(highlight.trim().split(/\s+/).filter(Boolean))];
+
+    if (!terms.length) {
+        return text;
+    }
+
+    const parts = text.split(new RegExp(`(${terms.map(escapeRegExp).join('|')})`, 'gi'));
     return <span> {parts.map((part, i) =>
-        <span key={i} style={part.toLowerCase() === highlight.toLowerCase() ? { background: 'pink' } : {}}>
+        <span key={i} style={terms.some(term => part.toLowerCase() === term.toLowerCase()) ? { background: 'pink' } : {}}>
             {part}
         </span>)
     } </span>;
@@ -50,7 +54,11 @@ const JsonSearch = () => {
         input.setFocus();
     };
 
-    useEffect(() => !didMount && input.setFocus());
+    useEffect(() => {
+        if (!didMount && input) {
+            input.setFocus();
+        }
+    }, [didMount]);
 
     return (
         <Template hiddenContextBar boxedCentered>

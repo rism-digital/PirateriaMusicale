@@ -36,8 +36,13 @@ const Collapsible = props => {
         props.onClickHandler && props.onClickHandler(collapsed);
     };
 
-    useEffect(() => setHighlight(props.highlight), [props.highlight]);
-    useEffect(() => setLoading(props.loading), [props.loading]);
+    useEffect(() => {
+        setHighlight(props.highlight);
+    }, [props.highlight]);
+
+    useEffect(() => {
+        setLoading(props.loading);
+    }, [props.loading]);
 
     const headerClassNames = ['collapsible-header'];
 

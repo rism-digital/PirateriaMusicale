@@ -1,23 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import { SearchIcon, BrowseIcon, PinIcon, BookIcon } from './Icons.jsx';
+import { SearchIcon, BrowseIcon, BookIcon } from './Icons.jsx';
 import { ClearButton } from './Buttons.jsx';
-import AnalysisContext from '../../../context/analysisContext';
-
-import BrowseContext from '../../../context/browseContext';
-import SearchContext from '../../../context/searchContext';
 
 import LinkWithTooltip from './LinkWithTooltip.jsx';
 
-const SidebarWithRoute = props => {
+export const Sidebar = () => {
 
-    const isActive = (path) => props.location.pathname.includes(path);
-
-    const { pinnedDocuments } = useContext(AnalysisContext);
-    const browseContext = useContext(BrowseContext);
-    const searchContext = useContext(SearchContext);
+    const location = useLocation();
+    const isActive = path => location.pathname.includes(path);
 
     return (
         <div className="sidebar-root">
@@ -27,13 +20,13 @@ const SidebarWithRoute = props => {
                 </ClearButton>
             </LinkWithTooltip>
 
-            <LinkWithTooltip onClick={() => { searchContext.unsetSearchSelected ? searchContext.unsetSearchSelected() : false; }} to="/search" content="Cerca nel testo">
+            <LinkWithTooltip to="/search" content="Cerca nel testo">
                 <ClearButton isActive={isActive('search')}>
                     <SearchIcon />
                 </ClearButton>
             </LinkWithTooltip>
 
-            <LinkWithTooltip onClick={() => { browseContext.unsetSearchResults ? browseContext.unsetSearchResults() : false; browseContext.unsetSearchSelected ? browseContext.unsetSearchSelected() : false; }} to="/browse" content="Sfoglia l'indice">
+            <LinkWithTooltip to="/browse" content="Sfoglia l'indice">
                 <ClearButton isActive={isActive('browse')}>
                     <BrowseIcon />
                 </ClearButton>
@@ -49,4 +42,4 @@ const SidebarWithRoute = props => {
     );
 };
 
-export const Sidebar = withRouter(SidebarWithRoute);
+export default Sidebar;

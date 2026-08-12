@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { withRouter } from 'react-router-dom';
 
 import { Navbar } from './components/Navbar.jsx';
 import { Sidebar } from './components/Sidebar.jsx';
@@ -40,4 +39,4 @@ const Template = props => {
 
 };
 
-export default withRouter(Template);
+export default Template;
